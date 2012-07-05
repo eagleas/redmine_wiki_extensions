@@ -30,12 +30,7 @@ class WikiExtensionsTag < ActiveRecord::Base
 
   def pages
     return @pages if @pages
-    relations = WikiExtensionsTagRelation.find(:all, :conditions =>['tag_id = ?', id])
-    @pages = []
-    relations.each{|relation|
-      @pages << relation.wiki_page
-    }
-    return @pages
+    @pages = WikiExtensionsTagRelation.where(['tag_id = ?', id]).includes(:wiki_page).map(&:wiki_page)
   end
 
   def page_count
