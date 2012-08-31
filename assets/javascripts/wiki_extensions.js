@@ -17,84 +17,69 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 function add_wiki_extension_sidebar() {
-    var sidebar = $('sidebar');
+    var sidebar = $('#sidebar');
     if (sidebar == null) {
         return;
     }
 
-    var sidebar_area = $('wiki_extentions_sidebar');
+    var sidebar_area = $('#wiki_extentions_sidebar');
     sidebar_area.remove();
-    sidebar.insert(sidebar_area);
+    sidebar.append(sidebar_area);
     sidebar_area.show();
 
 }
 
 function add_wiki_extensions_tags_form() {
-    var tags_form = $('wiki_extensions_tag_form');
-    var wiki_form = $('wiki_form');
-    var content_comments = $('content_comments');
+    var tags_form = $('#wiki_extensions_tag_form');
+    var wiki_form = $('#wiki_form');
+    var content_comments = $('#content_comments');
     tags_form.parentNode.removeChild(tags_form);
-    new Insertion.After(content_comments.parentNode, tags_form);
+    $(content_comments.parentNode).append(tags_form);
 }
 
 function set_tag_atuto_complete(taglist) {
-    var inputs = $$('.wikiext_tag_inputs');
+    var inputs = $('.wikiext_tag_inputs');
     for (var i = 0; i < inputs.length; i++) {
-        new Autocompleter.Local(inputs[i], "wikiext_taglist_complete", taglist, {});
+        inputs[i].autocomplete({source: taglist})
     }
 }
 
 function setWikiAutoPreview(url) {
-    new Field.Observer('content_text',2, function(){
-        new Ajax.Updater('preview', url, {
-            asynchronous:true,
-            evalScripts:true,
-            method:'post',
-            parameters:Form.serialize('wiki_form')
+    $('#content_text').observe_field(2, function(){
+        $.post(url, $('#wiki_form').serialize(), function(data) {
+            $('#preview').html(data)
         });
     });
 }
 
 function setMessagesAutoPreview(url) {
-    new Field.Observer('message_content',2, function(){
-        new Ajax.Updater('preview', url, {
-            asynchronous:true,
-            evalScripts:true,
-            method:'post',
-            parameters:Form.serialize('message-form')
+    $('#message_content').observe_field(2, function(){
+        $.post(url, $('#message-form').serialize(), function(data) {
+            $('#preview').html(data)
         });
     });
 }
 
 function setBoardsAutoPreview(url) {
-    new Field.Observer('message_content',2, function(){
-        new Ajax.Updater('preview', url, {
-            asynchronous:true,
-            evalScripts:true,
-            method:'post',
-            parameters:Form.serialize('message-form')
+    $('#message_content').observe_field(2, function(){
+        $.post(url, $('#message-form').serialize(), function(data) {
+            $('#preview').html(data)
         });
     });
 }
 
 function setIssueAutoPreview(url) {
-    new Field.Observer('issue_description',2, function(){
-        new Ajax.Updater('preview', url, {
-            asynchronous:true,
-            evalScripts:true,
-            method:'post',
-            parameters:Form.serialize('issue-form')
+    $('#issue_description').observe_field(2, function(){
+        $.post(url, $('#issue-form').serialize(), function(data) {
+            $('#preview').html(data)
         });
     });
 }
 
 function setIssueNotesAutoPreview(url) {
-    new Field.Observer('notes',2, function(){
-        new Ajax.Updater('preview', url, {
-            asynchronous:true,
-            evalScripts:true,
-            method:'post',
-            parameters:Form.serialize('issue-form')
+    $('#notes').observe_field(2, function(){
+        $.post(url, $('#issue-form').serialize(), function(data) {
+            $('#preview').html(data)
         });
     });
 }
@@ -113,7 +98,7 @@ function is_table_for_sort(tbody) {
 }
 function wiki_extension_create_table_header() {
 
-    var tbodys = $$('.wiki table tbody');
+    var tbodys = $('.wiki table tbody');
     for (var i = 0; i < tbodys.length; i++) {
         var tbody = tbodys[i];
         if (!is_table_for_sort(tbody)) {
