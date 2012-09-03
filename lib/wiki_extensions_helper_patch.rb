@@ -20,14 +20,14 @@ require_dependency "redmine/wiki_formatting/textile/helper"
 module WikiExtensionsHelperPatch
   def self.included(base) # :nodoc:
     base.send(:include, HelperMethodsWikiExtensions)
-    
-    
+
+
     base.class_eval do
-      unloadable # Send unloadable so it will not be unloaded in development    
-      alias_method_chain :heads_for_wiki_formatter, :wiki_smiles    
+      unloadable # Send unloadable so it will not be unloaded in development
+      alias_method_chain :heads_for_wiki_formatter, :wiki_smiles
     end
   end
-  
+
 end
 
 module HelperMethodsWikiExtensions
@@ -49,19 +49,20 @@ module HelperMethodsWikiExtensions
           oo << "buttons.push(['#{emoticon['emoticon'].gsub("'", "\\'")}', '#{emoticon['image']}', '#{emoticon['title']}']);\n"
         }
         oo << "setEmoticonButtons(buttons, '#{imageurl}');\n"
+        oo.html_safe
         end
-        o
+        o.html_safe
       end
       @heads_for_wiki_smiles_included = true
     end
   end
-    
+
   private
   def ie6_or_ie7?
     useragent = request.env['HTTP_USER_AGENT']
     return useragent.match(/IE[ ]+[67]./) != nil
   end
-  
- 
+
+
 end
 

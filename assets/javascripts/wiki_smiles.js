@@ -120,7 +120,7 @@ jsToolBar.prototype.elements.space5 = {
 
 function setEmoticonButtons(buttons, url) {
     emoticons_image_url = url;
-    buttons.each(function(button) {
+    $.each(buttons, function(button) {
         jsTooltip.prototype.elements[button[1]] = {
             type: 'button',
             title: button[2],

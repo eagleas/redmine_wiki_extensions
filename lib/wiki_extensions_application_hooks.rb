@@ -21,7 +21,7 @@ class WikiExtensionsApplicationHooks < Redmine::Hook::ViewListener
 
   render_on :view_layouts_base_html_head, :partial => 'wiki_extensions/html_header'
   render_on :view_layouts_base_body_bottom, :partial => 'wiki_extensions/body_bottom'
-    
+
 end
 
 def add_wiki_ext_tags_form(context)
@@ -53,10 +53,10 @@ def add_wiki_ext_tags_form(context)
     nextline = line + 1
     if (line < maxline - 1)
       o << '<span style="cursor:pointer;">'
-      o << image_tag(img, :onclick => '$("tag_line_' + nextline.to_s + '").show()')
+      o << image_tag(img, :onclick => ("javascript: $('#tag_line_#{nextline}').show()").html_safe)
       o << '</span>'
     end
-     
+
     o << '</div>'
   }
   o << '<div id="wikiext_taglist_complete"></div>'
@@ -65,6 +65,8 @@ def add_wiki_ext_tags_form(context)
   o << '<script type="text/javascript"> '
   o << "\n"
   o << '//<![CDATA'
+  o << "\n"
+  o << '$j(function(){'
   o << "\n"
   o << 'add_wiki_extensions_tags_form();'
   o << "\n"
@@ -77,7 +79,9 @@ def add_wiki_ext_tags_form(context)
     o << "\n"
     i = i+1
   }
-  o << 'set_tag_atuto_complete(taglist);'
+  o << 'set_tag_auto_complete(taglist);'
+  o << "\n"
+  o << '})'
   o << "\n"
   o << '//]]>'
   o << "\n"

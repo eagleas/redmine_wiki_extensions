@@ -31,17 +31,17 @@ function add_wiki_extension_sidebar() {
 
 function add_wiki_extensions_tags_form() {
     var tags_form = $('#wiki_extensions_tag_form');
-    var wiki_form = $('#wiki_form');
     var content_comments = $('#content_comments');
-    tags_form.parentNode.removeChild(tags_form);
-    $(content_comments.parentNode).append(tags_form);
+
+    $('#wiki_extensions_tag_form').appendTo($('#content_comments').parent());
 }
 
-function set_tag_atuto_complete(taglist) {
-    var inputs = $('.wikiext_tag_inputs');
-    for (var i = 0; i < inputs.length; i++) {
-        inputs[i].autocomplete({source: taglist})
-    }
+function set_tag_auto_complete(taglist) {
+    var inputs = $j('.wikiext_tag_inputs');
+
+    $j.each(inputs, function(index, obj){
+        $(obj).autocomplete({ source: taglist })
+    })
 }
 
 function setWikiAutoPreview(url) {

@@ -31,6 +31,7 @@
 
 
   <%=  stylesheet_link_tag(baseurl + "/plugin_assets/redmine_wiki_extensions/stylesheets/wiki_extensions.css") %>
+  <%= javascript_include_tag(baseurl + "/plugin_assets/redmine_wiki_extensions/javascripts/jquery.observe_field.js") %>
   <%= javascript_include_tag(baseurl + "/plugin_assets/redmine_wiki_extensions/javascripts/wiki_extensions.js") %>
   <% if (controller.class.name == 'WikiController') %>
     <%= javascript_include_tag(baseurl + "/plugin_assets/redmine_wiki_extensions/javascripts/tablesort.js") %>
