@@ -34,7 +34,7 @@ module WikiExtensionsWikiMacro
               :action => 'tag', :id => project, :tag_id => tag.id}) + '</li>'
       }
       o << '</ul>'
-      return o
+      return o.html_safe
     end
   end
 
@@ -57,7 +57,7 @@ module WikiExtensionsWikiMacro
               :action => 'tag', :id => project, :tag_id => tag.id}, :class => classes[index])
         o << ' '
       }
-      return o
+      return o.html_safe
     end
   end
 end
