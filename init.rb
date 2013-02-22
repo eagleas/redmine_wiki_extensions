@@ -14,46 +14,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require 'redmine'
-begin
-require 'config/initializers/session_store.rb'
-rescue LoadError
-end
 require 'redcloth3'
 
-require_dependency 'wiki_extensions_notifiable_patch'
-Dir::foreach(File.join(File.dirname(__FILE__), 'lib')) do |file|
-  next unless /\.rb$/ =~ file
-  require file
-end
-ActionView::Base.class_eval do
-  include ActionView::Helpers::WikiExtensionsHelper
-end
-
 Rails.configuration.to_prepare do
-  require_dependency 'projects_helper'
   # Guards against including the module multiple time (like in tests)
   # and registering multiple callbacks
+
+  ActiveSupport.on_load(:action_view) do
+    ActionView::Base.send :include, ActionView::Helpers::WikiExtensionsHelper
+  end
+
   unless ProjectsHelper.included_modules.include? WikiExtensionsProjectsHelperPatch
     ProjectsHelper.send(:include, WikiExtensionsProjectsHelperPatch)
   end
-  
+
   unless Redmine::WikiFormatting::Textile::Formatter.included_modules.include? WikiExtensionsFormatterPatch
     Redmine::WikiFormatting::Textile::Formatter.send(:include, WikiExtensionsFormatterPatch)
   end
-  
+
   unless Redmine::WikiFormatting::Textile::Helper.included_modules.include? WikiExtensionsHelperPatch
     Redmine::WikiFormatting::Textile::Helper.send(:include, WikiExtensionsHelperPatch)
   end
-  
+
   unless Redmine::Notifiable.included_modules.include? WikiExtensionsNotifiablePatch
     Redmine::Notifiable.send(:include, WikiExtensionsNotifiablePatch)
   end
-  
-  unless WikiController.included_modules.include? WikiExtensionsWikiControllerPatch
-    WikiController.send(:include, WikiExtensionsWikiControllerPatch)
+
+  ActiveSupport.on_load(:wiki_controller) do
+    unless WikiController.included_modules.include? WikiExtensionsWikiControllerPatch
+      WikiController.send(:include, WikiExtensionsWikiControllerPatch)
+    end
   end
-  
+
   unless WikiPage.included_modules.include? WikiExtensionsWikiPagePatch
     WikiPage.send(:include, WikiExtensionsWikiPagePatch)
   end
@@ -91,7 +83,7 @@ Redmine::Plugin.register :redmine_wiki_extensions do
   }
 
   RedCloth3::ALLOWED_TAGS << "div"
-    
+
   activity_provider :wiki_comment, :class_name => 'WikiExtensionsComment', :default => false
 end
 

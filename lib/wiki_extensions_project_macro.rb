@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require 'redmine'
+#require 'redmine'
 
 module WikiExtensionsProjectMacro
   Redmine::WikiFormatting::Macros.register do
@@ -24,7 +24,7 @@ module WikiExtensionsProjectMacro
       " \{{project(project_name, alias)}}\n" +
       " \{{project(project_identifire, alias}}\n"
     macro :project do |obj, args|
-      
+
       return nil if args.length < 1
       project_name = args[0].strip
       project = Project.find_by_name(project_name)

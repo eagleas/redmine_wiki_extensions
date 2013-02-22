@@ -1,13 +1,13 @@
-require 'redmine'
+#require 'redmine'
 require 'ref_issues/parser'
 
 module WikiExtensionsRefIssue
   Redmine::WikiFormatting::Macros.register do
     desc "Displays a list of referer issues."
     macro :ref_issues do |obj, args|
-      
+
       parser = nil
-      
+
       begin
         parser = WikiExtensions::RefIssues::Parser.new args
       rescue => err_msg
@@ -36,7 +36,7 @@ module WikiExtensionsRefIssue
           parser.searchWordsW.push(words)
         elsif obj.class == Issue  # チケットの場合はチケット番号表記を検索ワードにする
           parser.searchWordsW.push(['#'+obj.id.to_s]);
-        elsif obj.class == Journal && obj.journalized_type == "Issue" 
+        elsif obj.class == Journal && obj.journalized_type == "Issue"
           # チケットコメントの場合もチケット番号表記を検索ワードにする
           parser.searchWordsW.push(['#'+obj.journalized_id.to_s]);
         else
@@ -44,7 +44,7 @@ module WikiExtensionsRefIssue
           return;
         end
       end
-      
+
       @query = parser.query @project
 
       extend SortHelper
@@ -65,12 +65,12 @@ module WikiExtensionsRefIssue
       parser.searchWordsW.each do |words|
         @query.add_filter("subjectdescription","~", words)
       end
-      
+
       @query.column_names = parser.columns unless parser.columns.empty?
 
-      @issues = @query.issues(:order => sort_clause, 
+      @issues = @query.issues(:order => sort_clause,
                               :include => [:assigned_to, :tracker, :priority, :category, :fixed_version]);
-      
+
       disp = context_menu(issues_context_menu_path);
       disp << render(:partial => 'issues/list', :locals => {:issues => @issues, :query => @query});
 

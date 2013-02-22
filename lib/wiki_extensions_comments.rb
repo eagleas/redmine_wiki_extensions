@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require 'redmine'
+#require 'redmine'
 
 module WikiExtensionsComments
   Redmine::WikiFormatting::Macros.register do
@@ -27,7 +27,7 @@ module WikiExtensionsComments
       end
       page = obj.page
       return unless page
-      o = @_controller.send(:render_to_string, {:partial => "wiki_extensions/comment_form", :locals =>{:page => page}})  
+      o = @_controller.send(:render_to_string, {:partial => "wiki_extensions/comment_form", :locals =>{:page => page}})
       raw o
     end
   end

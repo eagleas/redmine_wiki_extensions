@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require File.dirname(__FILE__) + '/../test_helper'
-require "emoticons"
+require "wiki_extensions"
 
 class EmoticonsTest < ActiveSupport::TestCase
   fixtures :wiki_extensions_comments

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require 'redmine'
+#require 'redmine'
 
 module WikiExtensionsFootnote
 
@@ -35,7 +35,7 @@ module WikiExtensionsFootnote
       data = page.wiki_extension_data
       data[:footnotes] ||= []
       data[:footnotes] << {'word' => word, 'description' => description}
-      
+
 
       o = ""
       o << word

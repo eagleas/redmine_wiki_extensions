@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require 'redmine'
+#require 'redmine'
 
 module WikiExtensionsCountMacro
   Redmine::WikiFormatting::Macros.register do
@@ -28,7 +28,7 @@ module WikiExtensionsCountMacro
         WikiExtensionsCount.countup(page.id)
         session[:access_count_table][page.id] = 1
       end
-      
+
       return ''
     end
   end
@@ -47,7 +47,7 @@ module WikiExtensionsCountMacro
 
   Redmine::WikiFormatting::Macros.register do
     desc "Displays list of the popular pages.\n\n"+
-      "  !{{popularity}}\n" + 
+      "  !{{popularity}}\n" +
       "  !{{popularity(max)}}\n" +
       "  !{{popularity(max, term)}}\n"
     macro :popularity do |obj, args|
@@ -57,7 +57,7 @@ module WikiExtensionsCountMacro
       list = WikiExtensionsCount.popularity(@project.id, term)
       max = 0
       max = args[0].to_i if args.length
-      
+
       o = ''
       o << '<ol class="wikiext-popularity">'
       cnt = 0
