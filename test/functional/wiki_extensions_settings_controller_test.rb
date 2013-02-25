@@ -17,19 +17,16 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class WikiExtensionsSettingsControllerTest < ActionController::TestCase
-  fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis, 
+  fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis,
     :wiki_pages, :wiki_contents, :wiki_content_versions, :attachments,
     :wiki_extensions_comments, :wiki_extensions_tags, :wiki_extensions_menus,
     :wiki_extensions_votes, :wiki_extensions_settings
 
   def setup
-    @controller = WikiExtensionsSettingsController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
     @request.env["HTTP_REFERER"] = '/'
-    @request.session[:user_id] = 1
+    sign_in(users(:users_001))
     @project = Project.find(1)
-    
+
     enabled_module = EnabledModule.new
     enabled_module.project_id = 1
     enabled_module.name = 'wiki_extensions'
@@ -45,6 +42,7 @@ class WikiExtensionsSettingsControllerTest < ActionController::TestCase
         :menus => menus, :id => @project
       assert_response :redirect
       setting = WikiExtensionsSetting.find_or_create @project.id
+      Rails.logger.info("==============#{setting.inspect}=======")
       assert_equal(true, setting.auto_preview_enabled)
       menus = setting.menus
       assert_equal(5, menus.length)
@@ -56,5 +54,5 @@ class WikiExtensionsSettingsControllerTest < ActionController::TestCase
       assert_equal('my_page_name2', menus[1].page_name)
     end
   end
-  
+
 end

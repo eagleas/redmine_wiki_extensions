@@ -17,15 +17,12 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class WikiExtensionsControllerTest < ActionController::TestCase
-  fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis, 
+  fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis,
     :wiki_pages, :wiki_contents, :wiki_content_versions, :attachments,
     :wiki_extensions_comments, :wiki_extensions_tags, :wiki_extensions_menus,
     :wiki_extensions_votes
 
   def setup
-    @controller = WikiExtensionsController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
     @request.env["HTTP_REFERER"] = '/'
     @project = Project.find(1)
     @wiki = @project.wiki

@@ -17,14 +17,11 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class WikiControllerTest < ActionController::TestCase
-  fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis, 
+  fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis,
     :wiki_pages, :wiki_contents, :wiki_content_versions, :attachments,
     :wiki_extensions_comments, :wiki_extensions_tags
 
   def setup
-    @controller = WikiController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
     @request.env["HTTP_REFERER"] = '/'
     @project = Project.find(1)
     @wiki = @project.wiki
@@ -41,7 +38,7 @@ class WikiControllerTest < ActionController::TestCase
     header.content = WikiContent.new
     header.content.text = 'test'
     header.save!
-	footer = @wiki.find_or_new_page('Footer')
+  	footer = @wiki.find_or_new_page('Footer')
     footer.content = WikiContent.new
     footer.content.text = 'test'
     footer.save!
@@ -53,7 +50,7 @@ class WikiControllerTest < ActionController::TestCase
     enabled_module.project_id = 1
     enabled_module.name = 'wiki_extensions'
     enabled_module.save
-
+    sign_in(users(:users_001))
   end
 
   def test_comment_form
@@ -61,10 +58,8 @@ class WikiControllerTest < ActionController::TestCase
     text << "\n"
     text << "{{comments}}"
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
-
   end
 
   def test_comments
@@ -75,7 +70,6 @@ class WikiControllerTest < ActionController::TestCase
     comment.user_id = 1
     comment.comment = "aaa"
     comment.save!
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
@@ -86,7 +80,6 @@ class WikiControllerTest < ActionController::TestCase
     text << "{{div_start_tag(var, hoge)}}\n"
     text << "{{div_end_tag}}\n"
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
 
@@ -97,7 +90,6 @@ class WikiControllerTest < ActionController::TestCase
     text << "{{fn(ccc,ddd)}}\n"
     text << "{{fnlist}}\n"
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
 
@@ -109,7 +101,6 @@ class WikiControllerTest < ActionController::TestCase
     text << "{{new(#{(Date.today - 2).to_s})}}\n"
     text << "{{new(2009-03-01, 4)}}\n"
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
@@ -120,7 +111,6 @@ class WikiControllerTest < ActionController::TestCase
     text << "{{project(#{@project.name}, hoge)}}\n"
     text << "{{project(#{@project.id}), bar}}\n"
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
@@ -132,7 +122,6 @@ class WikiControllerTest < ActionController::TestCase
     text = "{{tags}}\n"
     text << "{{tagcloud}}\n"
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
@@ -144,13 +133,11 @@ class WikiControllerTest < ActionController::TestCase
     text << "{{wiki(#{@project.id}, #{@page_name})}}\n"
     text << "{{wiki(#{@project.id}, #{@page_name}, bar)}}\n"
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
 
   def test_edit
-    @request.session[:user_id] = 1
     get :edit, :project_id => 1, :id => @page_name
     assert_response :success
 
@@ -163,9 +150,8 @@ class WikiControllerTest < ActionController::TestCase
     text = ''
     text << "{{recent}}\n"
     text << "{{recent(10)}}\n"
-    
+
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
@@ -175,7 +161,6 @@ class WikiControllerTest < ActionController::TestCase
     text << "{{lastupdated_by}}\n"
 
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
@@ -185,7 +170,6 @@ class WikiControllerTest < ActionController::TestCase
     text << "{{lastupdated_at}}\n"
 
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
@@ -196,7 +180,6 @@ class WikiControllerTest < ActionController::TestCase
     text << "{{iframe(http://google.com, 200, 400, no)}}\n"
 
     setContent(text)
-    @request.session[:user_id] = 1
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
   end
@@ -207,7 +190,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{count}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
@@ -219,7 +201,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{show_count}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
@@ -231,7 +212,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{popularity}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
@@ -242,7 +222,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{popularity}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
@@ -254,7 +233,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{vote(aaa)}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
@@ -266,7 +244,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{show_vote(aaa)}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
@@ -278,7 +255,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{twitter(haru_iida)}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
@@ -290,7 +266,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{taggedpages(aaa)}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
@@ -303,7 +278,6 @@ class WikiControllerTest < ActionController::TestCase
       text << "{{ref_issues(-rw=test,project,tracker,subject,status,author,assigned,created,updated)}}\n"
 
       setContent(text)
-      @request.session[:user_id] = 1
       get :show, :project_id => 1, :id => @page_name
       assert_response :success
     end
