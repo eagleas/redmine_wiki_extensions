@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
 class WikiExtensionsTagRelationTest < ActiveSupport::TestCase
   fixtures :wiki_extensions_tag_relations
@@ -24,7 +24,7 @@ class WikiExtensionsTagRelationTest < ActiveSupport::TestCase
   def test_create
     relation = WikiExtensionsTagRelation.new
     assert !relation.save
-    
+
 
     tag = WikiExtensionsTag.find_or_create(1, 'bbb')
     relation.tag = tag

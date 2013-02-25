@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
 class WikiControllerTest < ActionController::TestCase
   fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis,
@@ -22,6 +22,7 @@ class WikiControllerTest < ActionController::TestCase
     :wiki_extensions_comments, :wiki_extensions_tags
 
   def setup
+    sign_in(users(:users_001))
     @request.env["HTTP_REFERER"] = '/'
     @project = Project.find(1)
     @wiki = @project.wiki
@@ -50,7 +51,6 @@ class WikiControllerTest < ActionController::TestCase
     enabled_module.project_id = 1
     enabled_module.name = 'wiki_extensions'
     enabled_module.save
-    sign_in(users(:users_001))
   end
 
   def test_comment_form
@@ -82,7 +82,6 @@ class WikiControllerTest < ActionController::TestCase
     setContent(text)
     get :show, :project_id => 1, :id => @page_name
     assert_response :success
-
   end
 
   def test_footnote

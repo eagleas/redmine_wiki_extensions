@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
 class WikiExtensionsSettingsControllerTest < ActionController::TestCase
   fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis,
@@ -42,7 +42,6 @@ class WikiExtensionsSettingsControllerTest < ActionController::TestCase
         :menus => menus, :id => @project
       assert_response :redirect
       setting = WikiExtensionsSetting.find_or_create @project.id
-      Rails.logger.info("==============#{setting.inspect}=======")
       assert_equal(true, setting.auto_preview_enabled)
       menus = setting.menus
       assert_equal(5, menus.length)

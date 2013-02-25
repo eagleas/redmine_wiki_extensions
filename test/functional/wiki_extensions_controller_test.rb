@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
 class WikiExtensionsControllerTest < ActionController::TestCase
   fixtures :projects, :users, :roles, :members, :enabled_modules, :wikis,
@@ -23,6 +23,7 @@ class WikiExtensionsControllerTest < ActionController::TestCase
     :wiki_extensions_votes
 
   def setup
+    sign_in(users(:users_001))
     @request.env["HTTP_REFERER"] = '/'
     @project = Project.find(1)
     @wiki = @project.wiki
@@ -46,13 +47,11 @@ class WikiExtensionsControllerTest < ActionController::TestCase
   end
 
   def test_add_comment
-    @request.session[:user_id] = 1
     post :add_comment, :id => 1, :wiki_page_id => @page.id, :comment => 'aaa'
     assert_response :redirect
   end
 
   def test_tag
-    @request.session[:user_id] = 1
     get :tag, :id => 1, :tag_id => 1
     #assert assigns[:tag]
   end
@@ -63,7 +62,6 @@ class WikiExtensionsControllerTest < ActionController::TestCase
     comment.user_id = 1
     comment.comment = "aaa"
     comment.save!
-    @request.session[:user_id] = 1
     post :destroy_comment, :id => 1, :comment_id => comment.id
     assert_response :redirect
     comment = WikiExtensionsComment.find(:first, :conditions => ['id = ?', comment.id])
@@ -77,7 +75,6 @@ class WikiExtensionsControllerTest < ActionController::TestCase
     comment.comment = "aaa"
     comment.save!
     message = "newcomment"
-    @request.session[:user_id] = 1
     post :update_comment, :id => 1, :comment_id => comment.id, :comment => message
     assert_response :redirect
     comment = WikiExtensionsComment.find(comment.id)
@@ -85,14 +82,12 @@ class WikiExtensionsControllerTest < ActionController::TestCase
   end
 
   def test_forwad_wiki_page
-    @request.session[:user_id] = 1
     get :forward_wiki_page, :id => 1, :menu_id => 1
     assert_response :redirect
   end
 
   context "vote" do
     should "success if new vote." do
-      @request.session[:user_id] = 1
       count = WikiExtensionsVote.find(:all).length
       post :vote, :id => 1, :target_class_name => 'Project', :target_id => 1,
         :key => 'aaa', :url => 'http://localhost:3000'
