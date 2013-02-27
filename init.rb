@@ -82,7 +82,7 @@ Redmine::Plugin.register :redmine_wiki_extensions do
     :if => Proc.new{|proj| WikiExtensionsMenu.enabled?(proj.id, no)}
   }
 
-  RedCloth3::ALLOWED_TAGS << "div"
+  #RedCloth3::ALLOWED_TAGS << "div"
 
   activity_provider :wiki_comment, :class_name => 'WikiExtensionsComment', :default => false
 end
