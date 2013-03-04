@@ -60,7 +60,7 @@ module HelperMethodsWikiExtensions
   private
   def ie6_or_ie7?
     useragent = request.env['HTTP_USER_AGENT']
-    return useragent.match(/IE[ ]+[67]./) != nil
+    return (useragent && useragent.match(/IE[ ]+[67]./) != nil)
   end
 
 
