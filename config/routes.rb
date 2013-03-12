@@ -15,6 +15,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require_dependency 'wiki_extensions_controller'
+
 RedmineApp::Application.routes.draw do
   match 'projects/:id/wiki_extensions/:action', :controller => 'wiki_extensions', :via => [:get, :post]
   match 'projects/:id/wiki_extensions_settings/:action', :controller => 'wiki_extensions_settings', :via => [:get, :post, :put]
