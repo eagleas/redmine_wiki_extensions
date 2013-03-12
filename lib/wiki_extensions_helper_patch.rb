@@ -16,6 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require_dependency "redmine/wiki_formatting/textile/helper"
+require_dependency "wiki_extensions"
 
 module WikiExtensionsHelperPatch
   def self.included(base) # :nodoc:
@@ -40,7 +41,7 @@ module HelperMethodsWikiExtensions
       content_for :header_tags do
         o = stylesheet_link_tag("wiki_smiles.css", :plugin => "redmine_wiki_extensions")
         o << javascript_include_tag("wiki_smiles.js", :plugin => "redmine_wiki_extensions")
-        emoticons = WikiExtensions::Emoticons.new
+        emoticons = ::WikiExtensions::Emoticons.new
         o << javascript_tag do
           oo = ""
         oo << "redmine_base_url = '#{baseurl}';\n"

@@ -15,6 +15,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require_dependency 'wiki_page'
+require_dependency 'wiki_extensions_tag'
+require_dependency 'wiki_extensions_tag_relation'
 
 module WikiExtensionsWikiPagePatch
   def self.included(base) # :nodoc:
@@ -29,21 +31,21 @@ module WikiExtensionsWikiPagePatch
       has_one :wiki_extensions_count, :foreign_key => :page_id, :dependent => :destroy
       class << self
         # I dislike alias method chain, it's not the most readable backtraces
-        
+
       end
-      
+
     end
 
   end
 end
 module ClassMethodsForWikiExtension
-  
+
 end
 
 module InstanceMethodsForWikiExtension
   def wiki_extension_data
     @wiki_extension_data ||= {}
-  end  
+  end
 
   def set_tags(tag_list = {})
     tag_array = []
@@ -57,7 +59,7 @@ module InstanceMethodsForWikiExtension
     wiki_extensions_tag_relations.each {|relation|
       relation.destroy
     }
-    
+
     tag_array.each{|name|
       tag = WikiExtensionsTag.find_or_create(self.project.id, name)
       relation = WikiExtensionsTagRelation.new
@@ -65,9 +67,7 @@ module InstanceMethodsForWikiExtension
       relation.wiki_page_id = self.id
       relation.save
     }
-    
+
   end
-  
+
 end
-
-
