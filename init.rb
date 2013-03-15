@@ -19,6 +19,9 @@ require 'redcloth3'
 Rails.configuration.to_prepare do
   # Guards against including the module multiple time (like in tests)
   # and registering multiple callbacks
+  require_dependency 'wiki_extensions_setting'
+  require_dependency 'wiki_extensions_menu'
+  require_dependency 'wiki_extensions_comments'
 
   ActiveSupport.on_load(:action_view) do
     ActionView::Base.send :include, ActionView::Helpers::WikiExtensionsHelper

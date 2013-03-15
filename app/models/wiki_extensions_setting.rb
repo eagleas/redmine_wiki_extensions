@@ -23,7 +23,7 @@ class WikiExtensionsSetting < ActiveRecord::Base
     unless setting
       setting = WikiExtensionsSetting.new
       setting.project_id = pj_id
-      setting.save!      
+      setting.save!
     end
     5.times do |i|
       WikiExtensionsMenu.find_or_create(pj_id, i + 1)
